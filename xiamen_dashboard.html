@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>厦门 5月县级分公司考核 - 专题分析</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+/* ── Design Tokens ── */
+:root{
+  --bg:#eef1f6;
+  --card:#fff;
+  --primary:#1a3a5c;
+  --primary-light:#2d6aa0;
+  --accent-blue:#3498db;
+  --accent-red:#e74c3c;
+  --accent-green:#27ae60;
+  --accent-orange:#e67e22;
+  --accent-yellow:#f1c40f;
+  --text:#2c3e50;
+  --text-muted:#8395a7;
+  --border:#dde3ea;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.06);
+  --shadow:0 2px 12px rgba(0,0,0,.08);
+  --shadow-hover:0 8px 28px rgba(0,0,0,.12);
+  --r:10px;
+  --r-lg:14px;
+  --gap:20px;
+  --section-gap:28px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacangFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── Header ── */
+.header{
+  background:linear-gradient(135deg,#1a3a5c 0%,#2d6aa0 50%,#3a7fc2 100%);
+  color:#fff;
+  padding:28px 36px 24px;
+  box-shadow:0 4px 20px rgba(26,58,92,.3);
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events:none;
+}
+.header h1{font-size:24px;font-weight:700;margin-bottom:6px;position:relative}
+.header .sub{opacity:.7;font-size:13px;position:relative}
+
+/* ── Container ── */
+.container{max-width:1400px;margin:0 auto;padding:24px 24px 40px}
+
+/* ── Section (outer wrapper) ── */
+.section{margin-bottom:var(--section-gap)}
+.section-inner{padding:0}
+
+/* ── KPI Cards ── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);margin-bottom:var(--section-gap)}
+.kpi-card{
+  background:var(--card);border-radius:var(--r-lg);
+  padding:20px 20px 16px;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease,box-shadow .18s ease;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.kpi-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+}
+.kpi-card.warn::after{background:linear-gradient(90deg,#e74c3c,#ff7675)}
+.kpi-card.info::after{background:linear-gradient(90deg,#3498db,#74b9ff)}
+.kpi-card.ok::after{background:linear-gradient(90deg,#27ae60,#2ecc71)}
+.kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+.kpi-card .label{font-size:12px;color:var(--text-muted);margin-bottom:6px;font-weight:600;letter-spacing:.2px}
+.kpi-card .value{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.3px}
+.kpi-card .sub{font-size:11px;color:#aab;margin-top:10px;line-height:1.5;flex:1 0 auto}
+.kpi-card.warn .value{color:var(--accent-red)}
+.kpi-card.info .value{color:var(--accent-blue)}
+
+/* ── Section Strips ── */
+.strip-warn{
+  background:linear-gradient(135deg,#fff5f5,#fff8f8);
+  border:1px solid #f5d5d5;border-radius:var(--r-lg);
+  padding:var(--gap);margin-bottom:var(--section-gap);
+}
+.strip-info{
+  background:linear-gradient(135deg,#f0f5ff,#f5f8ff);
+  border:1px solid #c8daf0;border-radius:var(--r-lg);
+  padding:var(--gap);margin-bottom:var(--section-gap);
+}
+
+/* ── Grid Layouts ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.grid-3{display:grid;grid-template-columns:1.2fr 1fr;gap:var(--gap)}
+
+/* ── Panel ── */
+.panel{
+  background:var(--card);border-radius:var(--r-lg);
+  padding:20px 22px;
+  box-shadow:var(--shadow);
+  display:flex;flex-direction:column;
+}
+.panel h3{
+  font-size:14px;font-weight:700;margin-bottom:12px;
+  color:var(--primary);
+  padding-bottom:10px;
+  border-bottom:2px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.panel h3::before{
+  content:'';display:inline-block;width:4px;height:16px;
+  border-radius:2px;
+  background:linear-gradient(180deg,var(--primary-light),var(--accent-blue));
+  flex-shrink:0;
+}
+.panel-body{flex:1 1 auto;display:flex;flex-direction:column}
+
+/* ── Tables ── */
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+th{
+  background:#f5f7fa;text-align:left;padding:9px 10px;
+  font-weight:700;color:#555;
+  border-bottom:2px solid var(--border);
+  white-space:nowrap;font-size:12px;
+  letter-spacing:.2px;
+  position:sticky;top:0;
+}
+td{padding:8px 10px;border-bottom:1px solid #eef1f5;font-size:12.5px}
+tbody tr:nth-child(even) td{background:#fafbfd}
+tbody tr:hover td{background:#eef3fb!important}
+/* numeric columns centered */
+td:nth-child(n+3),th:nth-child(n+3){text-align:center}
+/* first two columns left-aligned */
+td:nth-child(1),td:nth-child(2),th:nth-child(1),th:nth-child(2){text-align:left}
+td.bad{color:var(--accent-red);font-weight:700}
+td.good{color:var(--accent-green);font-weight:600}
+td.warn{color:var(--accent-orange);font-weight:700}
+
+/* ── Issue Cards ── */
+.issue-list{display:flex;flex-direction:column;gap:10px;flex:1 1 auto}
+.issue-card{
+  border-left:4px solid var(--accent-red);
+  background:linear-gradient(135deg,#fff5f5,#fff8f8);
+  padding:12px 16px;
+  border-radius:0 var(--r) var(--r) 0;
+  transition:transform .12s ease;
+}
+.issue-card:hover{transform:translateX(2px)}
+.issue-card.p1{border-color:var(--accent-orange);background:linear-gradient(135deg,#fffaf5,#fff8f2)}
+.issue-card.p2{border-color:var(--accent-yellow);background:linear-gradient(135deg,#fffef5,#fffdf0)}
+.issue-card.p3{border-color:#8395a7;background:linear-gradient(135deg,#f5f7fa,#f0f2f5)}
+.issue-card .issue-title{font-size:13px;font-weight:700;color:#c0392b;margin-bottom:4px;line-height:1.5}
+.issue-card.p1 .issue-title{color:#d35400}
+.issue-card.p2 .issue-title{color:#b7950b}
+.issue-card.p3 .issue-title{color:#636e72}
+.issue-card .issue-body{font-size:12px;color:#666;line-height:1.7}
+
+/* ── Chart Wrappers ── */
+.chart-wrap{position:relative;height:300px;margin-top:4px}
+.chart-wrap canvas{width:100%!important;height:100%!important}
+
+/* ── Recommendation List ── */
+.rec-list{list-style:none;padding:0}
+.rec-list li{
+  font-size:13px;padding:11px 0;
+  border-bottom:1px dashed var(--border);
+  line-height:1.75;
+  display:flex;align-items:flex-start;gap:6px;
+}
+.rec-list li:last-child{border:none;padding-bottom:0}
+.rec-tag{
+  display:inline-flex;align-items:center;
+  padding:2px 7px;border-radius:4px;
+  font-size:11px;font-weight:700;
+  flex-shrink:0;margin-top:2px;
+  white-space:nowrap;
+}
+.rec-tag.p0{background:#ffe0e0;color:#c0392b}
+.rec-tag.p1{background:#ffe8d0;color:#d35400}
+.rec-tag.p2{background:#fff8d0;color:#b7950b}
+.rec-tag.p3{background:#dfe6e9;color:#636e72}
+
+/* ── Footer ── */
+.footer{
+  text-align:center;padding:20px 0 0;
+  color:#aab;font-size:11.5px;
+  border-top:1px solid var(--border);
+  margin-top:8px;letter-spacing:.2px;
+}
+
+/* ── Responsive ── */
+@media(max-width:1200px){
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .chart-wrap{height:280px}
+}
+@media(max-width:640px){
+  .kpi-row{grid-template-columns:1fr}
+  .container{padding:12px 14px 24px}
+  .header{padding:18px 16px 14px}
+  .header h1{font-size:18px}
+  .chart-wrap{height:240px}
+  .panel{padding:14px 14px}
+  .strip-warn,.strip-info{padding:12px}
+  table{font-size:11px}
+  th,td{padding:6px 7px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>厦门 5月样本户管理考核专题分析</h1>
+  <div class="sub">福建省 9 地市 76 个县级分公司 · 考核月份：2026年5月</div>
+</div>
+
+<div class="container">
+
+<!-- KPI Cards -->
+<div class="kpi-row">
+  <div class="kpi-card warn">
+    <div class="label">厦门均分</div>
+    <div class="value">88.22</div>
+    <div class="sub">全省第7/9 · 低于均值 1.40 分</div>
+  </div>
+  <div class="kpi-card info">
+    <div class="label">厦门最高分</div>
+    <div class="value">93.37</div>
+    <div class="sub">第一分局 · 全省排名第33</div>
+  </div>
+  <div class="kpi-card warn">
+    <div class="label">厦门最低分</div>
+    <div class="value">83.94</div>
+    <div class="sub">湖里区局 · 全省排名第60</div>
+  </div>
+  <div class="kpi-card info">
+    <div class="label">全省均分</div>
+    <div class="value">89.62</div>
+    <div class="sub">莆田 95.50 位居第一</div>
+  </div>
+</div>
+
+<!-- Section: 核心对比（雷达图 + 问题聚焦） -->
+<div class="strip-warn">
+<div class="grid-2">
+  <div class="panel">
+    <h3>四分公司八维能力对比（雷达图）</h3>
+    <div class="panel-body">
+      <div class="chart-wrap"><canvas id="radarChart"></canvas></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>关键问题聚焦</h3>
+    <div class="panel-body">
+      <div class="issue-list">
+        <div class="issue-card">
+          <div class="issue-title">P0 · 上云平台预警 — 全省唯一全军覆没</div>
+          <div class="issue-body">
+            厦门4个分公司该维度全部0分，是<span style="color:#c0392b;font-weight:700">全省唯一</span>该维度全零的城市。
+            总预警607条，其中「单订单多规格异常」占比最高（集美173条、思明116条、湖里73条）。
+          </div>
+        </div>
+        <div class="issue-card p1">
+          <div class="issue-title">P1 · 异常客户剔除率 — 湖里/思明严重拖后腿</div>
+          <div class="issue-body">
+            湖里区局剔除率 <b>12.41%</b>（扣7分）、思明区局剔除率 <b>10.72%</b>（扣6分）。
+            第一分局仅4.22%（扣0分），说明同城差异巨大，存在管理短板。
+          </div>
+        </div>
+        <div class="issue-card p2">
+          <div class="issue-title">P2 · 样本合格率 — 湖里区局垫底</div>
+          <div class="issue-body">
+            湖里区局合格率仅 <b>79.69%</b>（64户中13户不合格，得分仅15.94/20）。
+            集美94.44%、思明93.33%，第一分局91.84%。
+          </div>
+        </div>
+        <div class="issue-card p3">
+          <div class="issue-title">P3 · 样本户区间数量 — 集美未达标</div>
+          <div class="issue-body">
+            集美区局扣3分：中区间27户 vs 目标16户（超标），小区间17户 vs 目标16户（达标）。
+            主要是大区间46户 vs 目标47户，差1户未达。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Section: 全省排名 + 厦门各分公司排名 -->
+<div class="strip-info">
+<div class="grid-3">
+  <div class="panel">
+    <h3>全省城市均分排名</h3>
+    <div class="panel-body">
+      <div class="chart-wrap"><canvas id="cityChart"></canvas></div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>厦门各分公司排名</h3>
+    <div class="panel-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分公司</th><th>总得分</th><th>全省排名</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>第一分局</td><td class="good">93.37</td><td>33/76</td><td>中游</td></tr>
+            <tr><td>集美区局</td><td>87.89</td><td>54/76</td><td>中下游</td></tr>
+            <tr><td>思明区局</td><td>87.67</td><td>55/76</td><td>中下游</td></tr>
+            <tr><td>湖里区局</td><td class="bad">83.94</td><td>60/76</td><td>中下游</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 全省城市对比总览表 -->
+<div class="section">
+<div class="panel">
+  <h3>全省城市对比总览</h3>
+  <div class="panel-body">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>排名</th><th>城市</th><th>均分</th><th>分公司数</th><th>最高分</th><th>上云预警0分家数</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>莆田</td><td class="good">95.50</td><td>4</td><td>97.00</td><td>0</td></tr>
+          <tr><td>2</td><td>龙岩</td><td class="good">94.08</td><td>7</td><td>99.46</td><td>0</td></tr>
+          <tr><td>3</td><td>福州</td><td class="good">92.69</td><td>10</td><td>96.09</td><td>2</td></tr>
+          <tr><td>4</td><td>漳州</td><td>90.39</td><td>10</td><td>96.79</td><td>1</td></tr>
+          <tr><td>5</td><td>宁德</td><td>89.61</td><td>9</td><td>97.00</td><td>1</td></tr>
+          <tr><td>6</td><td>泉州</td><td>88.65</td><td>11</td><td>97.20</td><td>4</td></tr>
+          <tr style="background:#fff5f0;font-weight:700"><td>7</td><td>厦门</td><td class="warn">88.22</td><td>4</td><td>93.37</td><td class="bad">4</td></tr>
+          <tr><td>8</td><td>南平</td><td>87.57</td><td>10</td><td>98.00</td><td>3</td></tr>
+          <tr><td>9</td><td>三明</td><td class="warn">84.52</td><td>11</td><td>95.00</td><td>4</td></tr>
+          <tr style="font-weight:700;background:#f0f4ff"><td>--</td><td>全省均值</td><td>89.62</td><td>76</td><td>--</td><td>--</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 八维度得分明细 -->
+<div class="section">
+<div class="panel">
+  <h3>八维度得分明细（厦门 vs 全省对标）</h3>
+  <div class="panel-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>考核维度</th>
+            <th>满分</th>
+            <th>全省最高分</th>
+            <th>全省均值</th>
+            <th>集美区局</th>
+            <th>第一分局</th>
+            <th>湖里区局</th>
+            <th>思明区局</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>样本户区间数量</td><td>9</td><td class="good">9</td><td>7.82</td>
+            <td class="warn">6.00</td><td class="good">9.00</td><td class="good">9.00</td><td class="good">9.00</td>
+          </tr>
+          <tr>
+            <td>样本户管理数</td><td>6</td><td class="good">6</td><td>5.58</td>
+            <td class="good">6.00</td><td class="good">6.00</td><td class="good">6.00</td><td class="good">6.00</td>
+          </tr>
+          <tr>
+            <td>小区间后备样本户建设</td><td>5</td><td class="good">5</td><td>4.93</td>
+            <td class="good">5.00</td><td class="good">5.00</td><td class="good">5.00</td><td class="good">5.00</td>
+          </tr>
+          <tr>
+            <td>样本户数据上传</td><td>10</td><td class="good">10</td><td>9.92</td>
+            <td class="good">10.00</td><td class="good">10.00</td><td class="good">10.00</td><td class="good">10.00</td>
+          </tr>
+          <tr>
+            <td>样本合格率</td><td>20</td><td class="good">20</td><td>18.00</td>
+            <td>18.89</td><td>18.37</td><td class="bad">15.94</td><td>18.67</td>
+          </tr>
+          <tr>
+            <td>异常客户剔除率</td><td>20</td><td class="good">20</td><td>17.22</td>
+            <td>17.00</td><td class="good">20.00</td><td class="bad">13.00</td><td class="warn">14.00</td>
+          </tr>
+          <tr>
+            <td>可用价采户比例</td><td>5</td><td class="good">5</td><td>4.90</td>
+            <td class="good">5.00</td><td class="good">5.00</td><td class="good">5.00</td><td class="good">5.00</td>
+          </tr>
+          <tr>
+            <td>上云平台预警</td><td>5</td><td class="good">5</td><td>1.25</td>
+            <td class="bad">0.00</td><td class="bad">0.00</td><td class="bad">0.00</td><td class="bad">0.00</td>
+          </tr>
+          <tr style="font-weight:700;border-top:2px solid #333">
+            <td>合计</td><td>80</td><td class="good">80</td><td>89.62</td>
+            <td>87.89</td><td>93.37</td><td class="bad">83.94</td><td>87.67</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 明细表：样本合格率 + 异常剔除率 -->
+<div class="section">
+<div class="grid-2">
+  <div class="panel">
+    <h3>样本合格率明细</h3>
+    <div class="panel-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分公司</th><th>样本户数</th><th>不合格</th><th>合格率</th><th>得分</th></tr></thead>
+          <tbody>
+            <tr><td>集美区局</td><td>90</td><td>5</td><td>94.44%</td><td>18.89</td></tr>
+            <tr><td>第一分局</td><td>98</td><td>8</td><td>91.84%</td><td>18.37</td></tr>
+            <tr><td>湖里区局</td><td>64</td><td class="bad">13</td><td class="bad">79.69%</td><td class="bad">15.94</td></tr>
+            <tr><td>思明区局</td><td>60</td><td>4</td><td>93.33%</td><td>18.67</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>异常客户剔除率明细</h3>
+    <div class="panel-body">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分公司</th><th>剔除率</th><th>剔除数</th><th>上报数</th><th>扣分</th></tr></thead>
+          <tbody>
+            <tr><td>第一分局</td><td class="good">4.22%</td><td>118</td><td>2794</td><td class="good">0</td></tr>
+            <tr><td>集美区局</td><td>8.38%</td><td>231</td><td>2757</td><td class="warn">-3</td></tr>
+            <tr><td>思明区局</td><td class="warn">10.72%</td><td>174</td><td>1623</td><td class="bad">-6</td></tr>
+            <tr><td>湖里区局</td><td class="bad">12.41%</td><td>239</td><td>1926</td><td class="bad">-7</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 上云平台预警明细 -->
+<div class="section">
+<div class="panel">
+  <h3>上云平台预警明细（厦门4家全部0分）</h3>
+  <div class="panel-body">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>分公司</th><th>条销售价格异常</th><th>包销售价格异常</th><th>修改库存异常</th><th>负库存异常</th><th>同ID多次异常</th><th>短时间扫码异常</th><th>单订单多规格异常</th><th>总预警条数</th><th>扣分</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>集美区局</td><td>14</td><td>40</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="bad">173</td><td class="bad">228</td><td class="bad">-5</td></tr>
+          <tr><td>思明区局</td><td>35</td><td>41</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="bad">116</td><td class="bad">192</td><td class="bad">-5</td></tr>
+          <tr><td>湖里区局</td><td>13</td><td>22</td><td>1</td><td>0</td><td>7</td><td>0</td><td class="warn">73</td><td class="warn">116</td><td class="bad">-5</td></tr>
+          <tr><td>第一分局</td><td>15</td><td>22</td><td>0</td><td>0</td><td>0</td><td>0</td><td>34</td><td>71</td><td class="bad">-5</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 改进建议 -->
+<div class="section">
+<div class="panel">
+  <h3>改进建议</h3>
+  <div class="panel-body">
+    <ul class="rec-list">
+      <li><span class="rec-tag p0">P0 紧急</span><b>上云平台预警专项整治</b>：重点聚焦「单订单多规格异常」和「包销售价格异常」两类。集美173条+思明116条单订单多规格异常需要逐一排查，建立预警日清日结机制。建议对标莆田（4家全部拿到该维度满分）的操作规范。</li>
+      <li><span class="rec-tag p0">P0 紧急</span><b>湖里区局专项帮扶</b>：湖里在合格率（79.69%）和剔除率（12.41%）两个维度均为厦门最差。建议对湖里区局开展专项督导，聚焦合格率和剔除率双短板，明确整改目标和时间节点，限期提升。</li>
+      <li><span class="rec-tag p1">P1 重要</span><b>异常客户剔除率管控</b>：思明（10.72%）和湖里（12.41%）需建立异常客户预警名单，做到提前发现、提前处理，降低月度集中剔除比例。第一分局4.22%为内部标杆。</li>
+      <li><span class="rec-tag p2">P2 重要</span><b>样本合格率提升</b>：湖里区局64户中13户不合格，建议按不合格原因分类（价格异常/数据异常/其他），制定分类整改措施。</li>
+      <li><span class="rec-tag p3">P3 关注</span><b>样本户区间数量精细化</b>：集美区局大区间差1户未达标，属于临门一脚。建议每月持续关注区间分布完成情况，发现缺口及时补足。</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<div class="footer">数据来源：5月县级分公司考核数据 · 分析时间：2026年6月15日</div>
+
+</div>
+
+<script>
+// ── Data ──
+const branches = ['集美区局', '第一分局', '湖里区局', '思明区局'];
+const dims = ['样本户区间数量', '样本户管理数', '小区间后备\n样本户建设', '样本户数据上传', '样本合格率', '异常客户剔除率', '可用价采户比例', '上云平台预警'];
+
+const radarData = {
+  集美区局: [6.0, 6.0, 5.0, 10.0, 18.89, 17.0, 5.0, 0.0],
+  第一分局: [9.0, 6.0, 5.0, 10.0, 18.37, 20.0, 5.0, 0.0],
+  湖里区局: [9.0, 6.0, 5.0, 10.0, 15.94, 13.0, 5.0, 0.0],
+  思明区局: [9.0, 6.0, 5.0, 10.0, 18.67, 14.0, 5.0, 0.0]
+};
+const provinceAvg = [7.82, 5.58, 4.93, 9.92, 18.0, 17.22, 4.9, 1.25];
+
+const radarMax = [9, 6, 5, 10, 20, 20, 5, 5];
+
+function normalize(vals, maxes) {
+  return vals.map((v, i) => (v / maxes[i]) * 100);
+}
+
+// ── Radar Chart ──
+const colors = ['#e74c3c', '#3498db', '#e67e22', '#2ecc71'];
+const bgColors = ['rgba(231,76,60,0.12)', 'rgba(52,152,219,0.12)', 'rgba(230,126,34,0.12)', 'rgba(46,204,113,0.12)'];
+
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: dims,
+    datasets: [
+      ...branches.map((b, i) => ({
+        label: b,
+        data: normalize(radarData[b], radarMax),
+        borderColor: colors[i],
+        backgroundColor: bgColors[i],
+        borderWidth: 2,
+        pointRadius: 3,
+      })),
+      {
+        label: '全省均值',
+        data: normalize(provinceAvg, radarMax),
+        borderColor: '#999',
+        backgroundColor: 'rgba(150,150,150,0.04)',
+        borderWidth: 1.5,
+        borderDash: [6, 3],
+        pointRadius: 2,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 14, padding: 10, font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const rawIdx = ctx.datasetIndex < 4 ? branches.indexOf(ctx.dataset.label) : -1;
+            const raw = rawIdx >= 0 ? radarData[branches[rawIdx]][ctx.dataIndex] : provinceAvg[ctx.dataIndex];
+            return `${ctx.dataset.label}: ${raw}分 (${ctx.raw.toFixed(0)}%)`;
+          }
+        }
+      }
+    },
+    scales: {
+      r: {
+        beginAtZero: true,
+        max: 100,
+        ticks: { stepSize: 20, backdropColor: 'transparent', font: { size: 10 } },
+        pointLabels: { font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// ── City Bar Chart ──
+const cityNames = ['莆田','龙岩','福州','漳州','宁德','泉州','厦门','南平','三明','全省均值'];
+const cityScores = [95.50, 94.08, 92.69, 90.39, 89.61, 88.65, 88.22, 87.57, 84.52, 89.62];
+const cityColors = cityNames.map(c => c === '厦门' ? 'rgba(231,76,60,0.85)' : c === '全省均值' ? 'rgba(150,150,150,0.6)' : 'rgba(52,152,219,0.7)');
+const cityBorders = cityNames.map(c => c === '厦门' ? '#c0392b' : c === '全省均值' ? '#888' : '#2980b9');
+
+new Chart(document.getElementById('cityChart'), {
+  type: 'bar',
+  data: {
+    labels: cityNames,
+    datasets: [{
+      label: '城市均分',
+      data: cityScores,
+      backgroundColor: cityColors,
+      borderColor: cityBorders,
+      borderWidth: 1.5,
+      borderRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.raw} 分`
+        }
+      }
+    },
+    scales: {
+      x: {
+        min: 80,
+        max: 100,
+        ticks: { stepSize: 5 },
+        grid: { color: 'rgba(0,0,0,0.06)' }
+      },
+      y: {
+        ticks: { font: { size: 12 } }
+      }
+    }
+  }
+});
+</script>
+
+</body>
+</html>
